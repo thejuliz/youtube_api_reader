@@ -19,6 +19,7 @@
             $('#result').empty();
             $('#result').append('<table />');
             $('#result table').addClass('table');
+            $('#result table').attr('id', 'table');
             // header
             var th = $('<tr />');
             for (var i = 0; i < json.columnHeaders.length; i++) {
@@ -36,6 +37,30 @@
                     $('#result table').append(tr);
                 }
             }
+            
+        }
+
+        function selectElementContents(el) {
+            var body = document.body, range, sel;
+            if (document.createRange && window.getSelection) {
+                range = document.createRange();
+                sel = window.getSelection();
+                sel.removeAllRanges();
+                try {
+                    range.selectNodeContents(el);
+                    sel.addRange(range);
+                } catch (e) {
+                    range.selectNode(el);
+                    sel.addRange(range);
+                }
+            } else if (body.createTextRange) {
+                range = body.createTextRange();
+                range.moveToElementText(el);
+                range.select();
+            }
+
+            document.execCommand('Copy');
+            alert('Copied!');
         }
     </script>
 </head>
@@ -43,7 +68,8 @@
 <body>
     <textarea name="txtarea" rows="10" cols="100"></textarea>
     <br/>
-    <input type="button" onclick="doConvert()" value="Convert!" />
+    <input id="convert_btn" type="button" class="btn btn-primary" onclick="doConvert()" value="Convert!" />
+    <input id="copy_btn" type="button" class="btn btn-success" onclick="selectElementContents( document.getElementById('table') )" value="Copy Result" />
     <div id="result"></div>
 </body>
 
